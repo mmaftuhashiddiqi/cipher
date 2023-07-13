@@ -31,17 +31,61 @@ def encrypt(message, key):
 				cipherMatrix[i][j] += (keyMatrix[i][x] * messageVector[x][j])
 			cipherMatrix[i][j] = cipherMatrix[i][j] % 26
 
-	# cipher text
+	# cipher text array
 	CipherText = []
 	for i in range(n):
 		CipherText.append(chr(cipherMatrix[i][0] + 65))
 
-	# cipher array to cipher string
+	# cipher text array to cipher string
 	return "".join(CipherText)
+
+import numpy as np
+# import scipy.linalg
 
 # hill decryption
 def decrypt(cipherMessage, key):
-	print("bentar, belum nemu")
+
+	n = len(cipherMessage)
+
+	# key matrix template
+	keyMatrix = [[0] * n for i in range(n)]
+	# message vector template
+	messageVector = [[0] for i in range(n)]
+	# cipher matrikx template
+	cipherMatrix = [[0] for i in range(n)]
+
+	# key matrix
+	k = 0
+	for i in range(n):
+		for j in range(n):
+			keyMatrix[i][j] = ord(key[k].upper()) % 65
+			k += 1
+	print("key matrix:", keyMatrix)
+	
+	# inverse key matrix
+	inverseKeyMatrix = np.linalg.inv(keyMatrix)
+	# inverseKeyMatrix = scipy.linalg.inv(keyMatrix)
+	print("inverse key matrix:", inverseKeyMatrix)
+
+	# generate message vector
+	for i in range(n):
+		messageVector[i][0] = ord(cipherMessage[i].upper()) % 65
+
+	# cipher matrix
+	for i in range(n):
+		for j in range(1):
+			cipherMatrix[i][j] = 0
+			for x in range(n):
+				cipherMatrix[i][j] += round(inverseKeyMatrix[i][x] * messageVector[x][j])
+			cipherMatrix[i][j] = cipherMatrix[i][j] % 26
+
+	# cipher text array
+	CipherText = []
+	for i in range(n):
+		CipherText.append(chr(cipherMatrix[i][0] + 65))
+
+	# cipher text array to cipher string
+	return "".join(CipherText)
 
 
 # CLI Program
@@ -72,5 +116,6 @@ while True:
     if isEnough == 'y' or isEnough == 'Y':
         break
 
-# message = "ACTA"
-# key = "GYBNQKURPABCDEFG"
+# message = "ACT"
+# key = "GYBNQKURP"
+# cipher message = POH
