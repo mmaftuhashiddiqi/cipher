@@ -3,7 +3,7 @@
 # hill encryption
 def encrypt(message, key):
 
-	if len(key) % len(message) == 0 and len(key) != len(message):
+	if len(key) == len(message) ** 2:
 		n = len(message)
 
 		# key matrix template
@@ -39,9 +39,9 @@ def encrypt(message, key):
 
 		# cipher text array to cipher string
 		return "".join(CipherText)
-	
+
 	else:
-		return "the key must be multiple of message and the length is not the same"
+		return "The key length must be the square of the message length"
 
 import numpy as np
 # import scipy.linalg
